@@ -1,7 +1,29 @@
-#include <iostream>
-#include <stdlib.h>
+#include "KdTree.h"
 
-using namespace std;
+vector<vd> Dataset; // Parsed from Input File
+vector<vector<int> > DimSortedDataset; // Precomputed Once -> Stores sorted Pointers to Original Dataset
+int DIMENSIONS; // To be set by Parser Function
+
+void parseInput(char *filename)//Parse and fill Dataset
+{
+
+}
+
+void preprocessing()
+{
+	int instances=Dataset.size();
+	DimSortedDataset.resize(DIMENSIONS);
+
+	for(int i=0;i<DIMENSIONS;i++)
+	{
+		DimSortedDataset.resize(instances);
+		for(int j=0;j<instances;j++)
+			DimSortedDataset[i][j]=j;
+		sort(DimSortedDataset[i].begin(),DimSortedDataset[i].end(),CustomComparator(i));
+		// https://stackoverflow.com/questions/4066576/passing-a-parameter-to-a-comparison-function
+	}
+}
+
 
 int main(int argc, char* argv[]) {
 
