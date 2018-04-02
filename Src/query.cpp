@@ -28,7 +28,7 @@ priority_queue<kd_tree_node*, vector<kd_tree_node*>, minheapComparator> min_heap
 
 
 
-void knn(kd_tree_node *root, vector<double> q, int k)
+void knn(kd_tree_node *root, vector<double> &q, int k)
 {
 
 	root->lowerbound = lowerbound(root->minRect, root->maxRect, q);
@@ -41,13 +41,14 @@ void knn(kd_tree_node *root, vector<double> q, int k)
 		min_heap.pop();
 
 		if (r->lowerbound > max_heap.top()->distance)
-			break;
+			if(max_heap.size()>=k)
+				break;
 
 		double distance = getDistance(r->Datapoint, q);
+		r->distance=distance;	/*Setting distance for the node*/
 
 		if (max_heap.size() < k)
 		{
-			root->distance = getDistance(q, root->Datapoint);
 			max_heap.push(r);
 		}
 		else if (distance < max_heap.top()->distance)
@@ -62,14 +63,14 @@ void knn(kd_tree_node *root, vector<double> q, int k)
 		if(left!=NULL)
 		{
 			left->lowerbound=lowerbound(left->minRect,left->maxRect,q);
-			if (left->lowerbound <= max_heap.top()->distance)
-				min_heap.push(left);
+			min_heap.push(left);
+			// if (left->lowerbound <= max_heap.top()->distance)
 		}
 		if(right!=NULL)
 		{
 			right->lowerbound = lowerbound(right->minRect, right->maxRect, q);
-			if (right->lowerbound <= max_heap.top()->distance)
-				min_heap.push(right);
+			min_heap.push(right);
+			// if (right->lowerbound <= max_heap.top()->distance)
 		}
 
 	}
