@@ -42,6 +42,7 @@ int main(int argc, char* argv[]) {
 
 	// [TODO] Read the query point from query_file, do kNN using the kdTree and output the answer to results.txt
 
+	
 	// Convey to parent that results.txt is ready by sending "1" on stdout | Timer will stop now and this process will be killed
 	cout << 1 << endl;
 }

@@ -20,6 +20,8 @@ struct kd_tree_node
 	vd Datapoint;
 	vd minRect,maxRect;
 	kd_tree_node *lef,*rig;
+	double distance;
+	double lowerbound;
 };
 
 extern vector<vd> Dataset; // Parsed from Input File
@@ -37,6 +39,23 @@ struct CustomComparator
 		return Dataset[i][parameter]<Dataset[j][parameter];
 	}
 	int parameter;
+};
+
+struct maxheapComparator
+{
+	bool operator()(kd_tree_node *i, kd_tree_node *j)
+	{
+		return i->distance > j->distance;
+	}
+
+};
+
+struct minheapComparator
+{
+	bool operator()(kd_tree_node *i, kd_tree_node *j)
+	{
+		return i->distance > j->distance;
+	}
 };
 
 #endif
