@@ -28,6 +28,9 @@ extern vector<vd> Dataset; // Parsed from Input File
 extern vector<vector<int> > DimSortedDataset; // Precomputed Once -> Stores sorted Pointers to Original Dataset
 extern int DIMENSIONS; // To be set by Parser Function
 
+kd_tree_node *make_tree(vector<vector<int> > DimSortedDataset,int dimCut);
+void knn(kd_tree_node *root, vector<double> &q, int k); 
+
 struct CustomComparator
 {
 	CustomComparator(int parameter)
@@ -53,8 +56,7 @@ struct minheapComparator
 {
 	bool operator()(kd_tree_node *i, kd_tree_node *j)
 	{
-		// return i->distance > j->distance;
-		return i->lowerbound > j->lowerbound;
+		return i->lowerbound < j->lowerbound;
 	}
 };
 
