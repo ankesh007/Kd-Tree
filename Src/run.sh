@@ -1,3 +1,3 @@
 #!/bin/bash
-make KdTree
+make
 ./KdTree $1
