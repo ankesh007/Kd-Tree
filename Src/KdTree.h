@@ -48,7 +48,7 @@ struct maxheapComparator
 {
 	bool operator()(kd_tree_node *i, kd_tree_node *j)
 	{
-		return i->distance > j->distance;
+		return i->distance < j->distance;
 	}
 };
 
@@ -56,7 +56,7 @@ struct minheapComparator
 {
 	bool operator()(kd_tree_node *i, kd_tree_node *j)
 	{
-		return i->lowerbound < j->lowerbound;
+		return i->lowerbound > j->lowerbound;
 	}
 };
 
