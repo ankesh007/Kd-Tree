@@ -19,7 +19,7 @@ void parseInput(char *filename)//Parse and fill Dataset
 		for(int j=0;j<DIMENSIONS;++j)
 		{
 			double a;
-			cin>>a;
+			in>>a;
 			temp.push_back(a);
 		}
 		Dataset.push_back(temp);
@@ -31,11 +31,16 @@ void preprocessing()
 	int instances=Dataset.size();
 	DimSortedDataset.resize(DIMENSIONS);
 
-	for(int i=0;i<DIMENSIONS;i++)
+	cerr << instances << endl;
+	cerr << DIMENSIONS << endl;
+	for (int i = 0; i < DIMENSIONS; i++)
 	{
-		DimSortedDataset.resize(instances);
+		cerr << i << endl;
+
+		DimSortedDataset[i].resize(instances);
 		for(int j=0;j<instances;j++)
-			DimSortedDataset[i][j]=j;
+			{
+				DimSortedDataset[i][j]=j;}
 		sort(DimSortedDataset[i].begin(),DimSortedDataset[i].end(),CustomComparator(i));
 		// https://stackoverflow.com/questions/4066576/passing-a-parameter-to-a-comparison-function
 	}
@@ -43,14 +48,16 @@ void preprocessing()
 
 
 int main(int argc, char* argv[]) {
-
+	cerr << "started" << endl;
 	char* dataset_file = argv[1];
 	parseInput(dataset_file);
+	cerr<<"input parsed"<<endl;
 	preprocessing();
 	// [TODO] Construct kdTree using dataset_file here
-
+	cerr << "started making tree"<<endl;
 	kd_tree_node * root=make_tree(DimSortedDataset,0);
 
+	cerr<<"tree made"<<endl;
 	// Request name/path of query_file from parent by just sending "0" on stdout
 	cout << 0 << endl;
 
@@ -65,16 +72,17 @@ int main(int argc, char* argv[]) {
 	qfile>>d;
 
 	vector<double> query_point;
-	for(int i=0;;++i)
+	for(int i=0;i<d;++i)
 	{
 		double a;
-		cin>>a;
+		qfile>>a;
 		query_point.push_back(a);
 	}
 
 	int k;
 	cin>>k;
-	
+	cerr<<"k received"<<endl;
+
 	knn(root,query_point,k);
 	cout<<1<<endl;
 

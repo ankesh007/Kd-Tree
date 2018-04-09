@@ -6,9 +6,10 @@ kd_tree_node *make_tree(vector<vector<int> > DimSortedDataset,int dimCut)
 	if(DimSortedDataset[0].size()==0)
 		return NULL;
 	//Empty Tree -> NULL
-
+	
 	int instances=DimSortedDataset[0].size();	/* Points this Node Represents*/
-	kd_tree_node *node=(kd_tree_node *)malloc(sizeof(kd_tree_node)); 
+	// kd_tree_node *node=(kd_tree_node *)malloc(sizeof(kd_tree_node));
+	kd_tree_node *node = new kd_tree_node;
 
 	node->minRect.resize(DIMENSIONS);
 	node->maxRect.resize(DIMENSIONS);

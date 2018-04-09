@@ -1,3 +1,5 @@
+.SILENT:clean
+.SILENT:KdTree
 HEADER_DIR=.
 OBJDIR=obj
 LIBS=-std=c++14

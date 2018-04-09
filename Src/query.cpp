@@ -37,12 +37,15 @@ void knn(kd_tree_node *root, vector<double> &q, int k)
 
 	while(!min_heap.empty())
 	{
+		// cerr<<min_heap.size()<<endl;
+
 		kd_tree_node* r=min_heap.top();
 		min_heap.pop();
 
-		if (r->lowerbound > max_heap.top()->distance)
-			if(max_heap.size()>=k)
+		if(max_heap.size()>=k)
+			if (r->lowerbound > max_heap.top()->distance)
 				break;
+		
 
 		double distance = getDistance(r->Datapoint, q);
 		r->distance=distance;	/*Setting distance for the node*/
@@ -63,14 +66,14 @@ void knn(kd_tree_node *root, vector<double> &q, int k)
 		if(left!=NULL)
 		{
 			left->lowerbound=lowerbound(left->minRect,left->maxRect,q);
+			if (left->lowerbound <= max_heap.top()->distance)
 			min_heap.push(left);
-			// if (left->lowerbound <= max_heap.top()->distance)
 		}
 		if(right!=NULL)
 		{
 			right->lowerbound = lowerbound(right->minRect, right->maxRect, q);
+			if (right->lowerbound <= max_heap.top()->distance)
 			min_heap.push(right);
-			// if (right->lowerbound <= max_heap.top()->distance)
 		}
 
 	}

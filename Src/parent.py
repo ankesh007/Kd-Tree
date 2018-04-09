@@ -6,7 +6,7 @@ from nbstreamreader import NonBlockingStreamReader as NBSR
 from queue import Empty
 from shutil import copyfile
 
-SAFETY_TIMEOUT = 60 # Wait for at most 60 seconds for the child to answer the query | Change this as you need
+SAFETY_TIMEOUT = 6000 # Wait for at most 60 seconds for the child to answer the query | Change this as you need
 
 # --------------------------------------------------------------------#
 
@@ -71,11 +71,15 @@ if __name__ == "__main__":
 
 	childStdout = NBSR(childProc.stdout)
 
+	print("wait for 0")
 	wait_for_data('0') # Wait for child to complete kdTree construction
+	print("0 received")
 	send_data(query_file+'\n') # Send the name/path of query_file to the child
 	start_time = time.time()
 	send_data(str(k)+'\n') # Send the value of k to the child
+	print("wait for 1")
 	wait_for_data('1') # Wait for child to answer the query
+	print("1 received")
 	time_taken = time.time() - start_time
 	
 	exit("[PARENT:] Time taken to answer query: %f seconds"%time_taken)
