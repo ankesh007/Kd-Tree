@@ -28,8 +28,9 @@ extern vector<vd> Dataset; // Parsed from Input File
 extern vector<vector<int> > DimSortedDataset; // Precomputed Once -> Stores sorted Pointers to Original Dataset
 extern int DIMENSIONS; // To be set by Parser Function
 
-kd_tree_node *make_tree(vector<vector<int> > DimSortedDataset,int dimCut);
+kd_tree_node *make_tree(vector<vector<int> > &DimSortedDataset,int dimCut);
 void knn(kd_tree_node *root, vector<double> &q, int k); 
+void naive_knn(vector<double> &q, int k); 
 
 struct CustomComparator
 {
@@ -52,6 +53,14 @@ struct maxheapComparator
 	}
 };
 
+struct maxheapComparator2
+{
+	bool operator()(pair<double,int> i,pair<double,int> j)
+	{
+		return i.x < j.x;
+	}
+};
+
 struct minheapComparator
 {
 	bool operator()(kd_tree_node *i, kd_tree_node *j)
@@ -59,5 +68,7 @@ struct minheapComparator
 		return i->lowerbound > j->lowerbound;
 	}
 };
+extern priority_queue<kd_tree_node *, vector<kd_tree_node *>, maxheapComparator> max_heap;
+extern priority_queue<pair<double,int>, vector<pair<double,int> >, maxheapComparator2> naive_max_heap;
 
 #endif

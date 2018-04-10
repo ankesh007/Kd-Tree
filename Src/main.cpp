@@ -4,8 +4,6 @@ vector<vd> Dataset; // Parsed from Input File
 vector<vector<int> > DimSortedDataset; // Precomputed Once -> Stores sorted Pointers to Original Dataset
 int DIMENSIONS; // To be set by Parser Function
 
-extern priority_queue<kd_tree_node *, vector<kd_tree_node *>, maxheapComparator> max_heap;
-
 void parseInput(char *filename)//Parse and fill Dataset
 {
 	ifstream in;
@@ -35,19 +33,27 @@ void preprocessing()
 	cerr << DIMENSIONS << endl;
 	for (int i = 0; i < DIMENSIONS; i++)
 	{
-		cerr << i << endl;
+		// cerr << i << endl;
 
 		DimSortedDataset[i].resize(instances);
 		for(int j=0;j<instances;j++)
-			{
-				DimSortedDataset[i][j]=j;}
+		{
+				DimSortedDataset[i][j]=j;
+		}
 		sort(DimSortedDataset[i].begin(),DimSortedDataset[i].end(),CustomComparator(i));
 		// https://stackoverflow.com/questions/4066576/passing-a-parameter-to-a-comparison-function
 	}
+	// for(int i=0;i<DIMENSIONS;i++)
+	// {
+	// 	cout<<i<<"hi"<<endl;
+	// 	for(int j=0;j<instances;j++)
+	// 		cout<<DimSortedDataset[i][j]<<endl;
+	// }
 }
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 	cerr << "started" << endl;
 	char* dataset_file = argv[1];
 	parseInput(dataset_file);
@@ -89,25 +95,29 @@ int main(int argc, char* argv[]) {
 	ofstream rfile;
 	rfile.open("results.txt");
 
-	vector<pair<double,vd>>res;
+	vector<kd_tree_node *> result;
+	int len=max_heap.size();
+	result.resize(len);
+	int index=len;
+
 	while(!max_heap.empty())
 	{
+		index--;
 		kd_tree_node* r=max_heap.top();
 		max_heap.pop();
-		res.push_back(make_pair(r->distance,r->Datapoint));
+		result[index]=r;
 	}
-	sort(res.begin(),res.end());
-	for(int i=0;i<res.size();++i)
+
+	for(int i=0;i<len;++i)
 	{
-		vd temp=res[i].second;
-		for(int j=0;j<temp.size();++j)
-		{rfile<<temp[j]<<' ';}
-		rfile<<'\n';
+		for(int j=0;j<DIMENSIONS;++j)
+		{
+			rfile<<(result[i]->Datapoint[j])<<" ";
+		}
+		rfile<<"\n";
 	}
 	rfile.close();
 	
-	// cerr << dataset_file << " " << query_file << " " << k << endl;
-
 	// [TODO] Read the query point from query_file, do kNN using the kdTree and output the answer to results.txt
 
 	

@@ -1,7 +1,7 @@
 #include "KdTree.h"
 
 // Receives datapoints and splitDimension and Returns Root Node
-kd_tree_node *make_tree(vector<vector<int> > DimSortedDataset,int dimCut)
+kd_tree_node *make_tree(vector<vector<int> > &DimSortedDataset,int dimCut)
 {
 	if(DimSortedDataset[0].size()==0)
 		return NULL;

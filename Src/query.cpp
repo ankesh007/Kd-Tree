@@ -1,9 +1,11 @@
 #include "KdTree.h"
 
+priority_queue<kd_tree_node*, vector<kd_tree_node*>, maxheapComparator> max_heap;
+priority_queue<pair<double,int>, vector<pair<double,int> >, maxheapComparator2> naive_max_heap;
 //Returns L^2 distance between 2 dataPoints
 double getDistance(vd &a,vd &b)
 {
-	long dist=0;
+	double dist=0;
 	for(int i=0;i<DIMENSIONS;i++)
 		dist+=(a[i]-b[i])*(a[i]-b[i]);
 	return dist;
@@ -11,7 +13,7 @@ double getDistance(vd &a,vd &b)
 
 double lowerbound(vd &mi, vd &ma, vd &a)
 {
-	long dist = 0;
+	double dist = 0;
 	for (int i = 0; i < DIMENSIONS; i++)
 	{
 		double t1=a[i]-mi[i],t2=a[i]-ma[i];
@@ -22,15 +24,10 @@ double lowerbound(vd &mi, vd &ma, vd &a)
 	return dist;
 }
 
-
-priority_queue<kd_tree_node*, vector<kd_tree_node*>, maxheapComparator> max_heap;
-priority_queue<kd_tree_node*, vector<kd_tree_node*>, minheapComparator> min_heap;
-
-
-
+// Stores the result in global max_heap -> To access actual datapoints, pop nodes from heap and use node->Datapoint
 void knn(kd_tree_node *root, vector<double> &q, int k)
 {
-
+	priority_queue<kd_tree_node*, vector<kd_tree_node*>, minheapComparator> min_heap;
 	root->lowerbound = lowerbound(root->minRect, root->maxRect, q);
 
 	min_heap.push(root);
@@ -38,7 +35,6 @@ void knn(kd_tree_node *root, vector<double> &q, int k)
 	while(!min_heap.empty())
 	{
 		// cerr<<min_heap.size()<<endl;
-
 		kd_tree_node* r=min_heap.top();
 		min_heap.pop();
 
@@ -66,15 +62,33 @@ void knn(kd_tree_node *root, vector<double> &q, int k)
 		if(left!=NULL)
 		{
 			left->lowerbound=lowerbound(left->minRect,left->maxRect,q);
-			if (left->lowerbound <= max_heap.top()->distance)
 			min_heap.push(left);
 		}
 		if(right!=NULL)
 		{
 			right->lowerbound = lowerbound(right->minRect, right->maxRect, q);
-			if (right->lowerbound <= max_heap.top()->distance)
 			min_heap.push(right);
 		}
-
 	}
+}
+
+// Stores the result in global naive_max_heap -> To access actual datapoints, elements from heap(node) and perform(Dataset[node.y])
+void naive_knn(vector<double> &q, int k)
+{
+	int instances=Dataset.size();
+
+	for(int i=0;i<instances;i++)
+	{
+		double dist=getDistance(q,Dataset[i]);
+		if(naive_max_heap.size()<k)
+			naive_max_heap.push({dist,i});
+		else
+		{
+			if(dist<naive_max_heap.top().x)
+			{
+				naive_max_heap.pop();
+				naive_max_heap.push({dist,i});
+			}
+		}
+	}	
 }
