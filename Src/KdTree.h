@@ -51,7 +51,7 @@ struct maxheapComparator
 	{
 		if(i->distance!=j->distance)
 			return i->distance < j->distance;
-		bool flag=false;
+		bool flag=true;
 		for(int d=0;d<DIMENSIONS;d++)
 		{
 			if(i->Datapoint[d]<j->Datapoint[d])
@@ -62,6 +62,7 @@ struct maxheapComparator
 				break;
 			}
 		}
+		return flag;
 	}
 };
 
