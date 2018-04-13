@@ -23,6 +23,21 @@ double lowerbound(vd &mi, vd &ma, vd &a)
 	}
 	return dist;
 }
+// returns true if a<b
+bool lexioCompare(vd &a,vd &b)
+{
+	bool flag=true;
+	for(int i=0;i<DIMENSIONS;i++)
+	{
+		if(a[i]<b[i])
+			break;
+		if(a[i]>b[i])
+		{
+			flag=false;
+			break;
+		}
+	}
+}
 
 // Stores the result in global max_heap -> To access actual datapoints, pop nodes from heap and use node->Datapoint
 void knn(kd_tree_node *root, vector<double> &q, int k)
@@ -51,6 +66,12 @@ void knn(kd_tree_node *root, vector<double> &q, int k)
 			max_heap.push(r);
 		}
 		else if (distance < max_heap.top()->distance)
+		{
+			max_heap.pop();
+			max_heap.push(r);
+		}
+		//Added for lexiographic ordering in case of ties
+		else if(distance==max_heap.top()->distance && lexioCompare(r->Datapoint,max_heap.top()->Datapoint))
 		{
 			max_heap.pop();
 			max_heap.push(r);
@@ -88,6 +109,11 @@ void naive_knn(vector<double> &q, int k)
 			{
 				naive_max_heap.pop();
 				naive_max_heap.push({dist,i});
+			}
+			else if(dist==naive_max_heap.top().x && lexioCompare(Dataset[i],Dataset[naive_max_heap.top().y]))
+			{
+				naive_max_heap.pop();
+				naive_max_heap.push({dist,i});				
 			}
 		}
 	}	
