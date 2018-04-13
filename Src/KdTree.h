@@ -49,7 +49,19 @@ struct maxheapComparator
 {
 	bool operator()(kd_tree_node *i, kd_tree_node *j)
 	{
-		return i->distance < j->distance;
+		if(i->distance!=j->distance)
+			return i->distance < j->distance;
+		bool flag=false;
+		for(int d=0;d<DIMENSIONS;d++)
+		{
+			if(i->Datapoint[d]<j->Datapoint[d])
+				break;
+			if(i->Datapoint[d]>j->Datapoint[d])
+			{
+				flag=false;
+				break;
+			}
+		}
 	}
 };
 
