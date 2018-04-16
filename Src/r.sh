@@ -4,7 +4,7 @@ echo "data generated";
 
 rm -f graph.csv
 touch graph.csv
-
+rm -f KdTree
 for k in {20,100}
 do
 echo "">error$k;
@@ -15,10 +15,11 @@ do
 	datafile="./Data/data"$d".txt"
 	queryfile="./Data/query"$d".txt"
 	echo "$d">>error$k;
-	python3 parent.py  $datafile $queryfile $k $d 2>> error$k
+	python3 parent1.py  $datafile $queryfile $k $d 2>> error$k
 	echo "-----------------" >>error$k
 	
 	echo "---------------------------";
 
 done;	
 done;	
+rm -f KdTree

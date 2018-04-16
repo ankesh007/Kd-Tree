@@ -9,7 +9,7 @@ for d in [2,3,5,10,15,20]:
 
 	for i in range(n1):
 		for j in range(d):
-			f.write(str(random.uniform(0,1))+" ")
+			f.write(str(round(random.uniform(0,1),5))+" ")
 		f.write('\n')
 
 
@@ -17,7 +17,7 @@ for d in [2,3,5,10,15,20]:
 	q.write(str(d)+" "+str(n2)+"\n")
 	for i in range(n2):	
 		for j in range(d):
-			q.write(str(random.uniform(0, 1)) + " ")
+			q.write(str(round(random.uniform(0, 1), 5)) + " ")
 		q.write('\n')
 	q.close()
 

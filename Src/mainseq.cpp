@@ -53,6 +53,8 @@ void preprocessing()
 
 int main(int argc, char *argv[])
 {
+	double d2=0,d100=0;
+
 	cerr << "started" << endl;
 	char *dataset_file = argv[1];
 	parseInput(dataset_file);
@@ -86,7 +88,7 @@ int main(int argc, char *argv[])
 	cerr << n2 << " queries" << endl;
 	for (int z = 0; z < n2; ++z)
 	{
-		cerr <<"z="<< z << endl;
+		// cerr <<"z="<< z << endl;
 		vector<double> query_point;
 		for (int i = 0; i < d; ++i)
 		{
@@ -110,7 +112,17 @@ int main(int argc, char *argv[])
 			result[index] = r;
 		}
 
+		// for (int i = 0; i < d; ++i)
+		// {
+		// 	rfile << query_point[i] << " ";
+		// }
+		// rfile << "\n";
 
+		if(k==100)
+		{
+			d2+= result[1].first;
+			d100 += result[99].first;
+		} 
 		for (int i = 0; i < len; ++i)
 		{
 			int idx = result[i].second ;
@@ -119,11 +131,17 @@ int main(int argc, char *argv[])
 			{
 				rfile << (Dataset[idx][j]) << " ";
 			}
-			rfile << result[i].first;
+			// rfile << result[i].first;
 			rfile	  << "\n";
 		}
 	}
 
+	if(k==100)
+	{
+		cerr<<"Avg dist to 2nd closest=  "<<d2/n2<<endl;
+		cerr << "Avg dist to 100th closest=" << d100 / n2 << endl;
+		cerr<<d2/d100<<endl;
+	}
 	cout << 1 << endl;
 
 	rfile.close();

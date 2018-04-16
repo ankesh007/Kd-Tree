@@ -6,8 +6,8 @@ endif
 HEADER_DIR=.
 OBJDIR=obj
 LIBS=-std=c++14
-# SRCS=KdTree.cpp main.cpp query.cpp 
-SRCS=KdTree.cpp mainseq.cpp query.cpp 
+SRCS=KdTree.cpp main.cpp query.cpp 
+# SRCS=KdTree.cpp mainseq.cpp query.cpp 
 
 DEPS = $(wildcard $(HEADER_DIR)/*.h)
 OBJS = $(patsubst %.cpp, $(OBJDIR)/%.o, $(SRCS))

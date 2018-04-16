@@ -5,24 +5,39 @@ priority_queue<pair<double,int>, vector<pair<double,int> >, maxheapComparator2> 
 //Returns L^2 distance between 2 dataPoints
 double getDistance(vd &a,vd &b)
 {
-	double dist=0;
+	double dist=0,t;
 	for(int i=0;i<DIMENSIONS;i++)
-		dist+=(a[i]-b[i])*(a[i]-b[i]);
-	return dist;
+	{
+		t = a[i] - b[i] ;
+		dist += t * t;
+	}
+	return (dist);
 }
 
 double lowerbound(vd &mi, vd &ma, vd &a)
 {
 	double dist = 0;
-	for (int i = 0; i < DIMENSIONS; i++)
+	for (int i = 0; i < DIMENSIONS; ++i)
 	{
 		double t1=a[i]-mi[i],t2=a[i]-ma[i];
 		t1=t1*t1;
-		t2=t2*t2;		
-		dist += min(t1,t2);
+		t2=t2*t2;
+		double t=min(t1,t2);
+		if(mi[i]<a[i] && a[i]<ma[i])
+		t=0;		
+		dist += t;
 	}
-	return dist;
+	return (dist);
 }
+
+double getDistance_seq(vd &a, vd &b)
+{
+	double dist = 0;
+	for (int i = 0; i < DIMENSIONS; i++)
+		dist += (a[i] - b[i]) * (a[i] - b[i]);
+	return sqrt(dist);
+}
+
 // returns true if a<b
 bool lexioCompare(vd &a,vd &b)
 {
@@ -37,6 +52,7 @@ bool lexioCompare(vd &a,vd &b)
 			break;
 		}
 	}
+	return flag;
 }
 
 // Stores the result in global max_heap -> To access actual datapoints, pop nodes from heap and use node->Datapoint
@@ -84,12 +100,14 @@ void knn(kd_tree_node *root, vector<double> &q, int k)
 		if(left!=NULL)
 		{
 			left->lowerbound=lowerbound(left->minRect,left->maxRect,q);
-			min_heap.push(left);
+			if (left->lowerbound <= max_heap.top()->distance)
+				min_heap.push(left);
 		}
 		if(right!=NULL)
 		{
 			right->lowerbound = lowerbound(right->minRect, right->maxRect, q);
-			min_heap.push(right);
+			if (right->lowerbound <= max_heap.top()->distance)
+				min_heap.push(right);
 		}
 	}
 }
@@ -101,7 +119,7 @@ void naive_knn(vector<double> &q, int k)
 
 	for(int i=0;i<instances;i++)
 	{
-		double dist=getDistance(q,Dataset[i]);
+		double dist=getDistance_seq(q,Dataset[i]);
 		if(naive_max_heap.size()<k)
 			naive_max_heap.push({dist,i});
 		else

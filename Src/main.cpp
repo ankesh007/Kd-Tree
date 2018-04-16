@@ -51,45 +51,47 @@ void preprocessing()
 	// }
 }
 
+vector<vector<kd_tree_node *> > result;
 
 int main(int argc, char* argv[])
 {
-	cerr << "started" << endl;
+	// cerr << "started" << endl;
 	char* dataset_file = argv[1];
 	parseInput(dataset_file);
-	cerr<<"input parsed"<<endl;
+	// cerr<<"input parsed"<<endl;
 	preprocessing();
 	// [TODO] Construct kdTree using dataset_file here
-	cerr << "started making tree"<<endl;
+	// cerr << "started making tree"<<endl;
 	kd_tree_node * root=make_tree(DimSortedDataset,0);
 
-	cerr<<"tree made"<<endl;
-	// Request name/path of query_file from parent by just sending "0" on stdout
+	// cerr<<"tree made"<<endl;
+	
 	ofstream rfile;
-	// rfile.open("results.txt");
+	rfile.open("results.txt");
+
+	char* query_file = new char[100];
+	ifstream qfile;
+	int d,n2;
+	int k;
 	cout << 0 << endl;
 
 	// Wait till the parent responds with name/path of query_file and k | Timer will start now
-	char* query_file = new char[100];
 	cin >> query_file;
 
-	ifstream qfile;
 	qfile.open(query_file);
 
-	int d,n2;
 	qfile>>d>>n2;
-	int k;
 	cin>>k;
 
-	string resfile = "./Results/resultskd_" + to_string(k) + "_" + to_string(d) + ".txt";
-	rfile.open(resfile);
+	// string resfile = "./Results/resultskd_" + to_string(k) + "_" + to_string(d) + ".txt";
+	// rfile.open(resfile);
 
-	cerr<<"k received"<<endl;
 
-cerr<<n2<<" queries"<<endl;
+// cerr<<n2<<" queries"<<endl;
+result.resize(n2);
 for(int z=0;z<n2;++z)
 {
-	cerr<<z<<endl;
+	// cerr<<z<<endl;
 	vector<double> query_point;
 	for(int i=0;i<d;++i)
 	{
@@ -102,9 +104,9 @@ for(int z=0;z<n2;++z)
 	knn(root,query_point,k);
 
 
-	vector<kd_tree_node *> result;
-	int len=max_heap.size();
-	result.resize(len);
+	// vector<kd_tree_node *> result;
+	int len=k;
+	result[z].resize(len);
 	int index=len;
 
 	while(!max_heap.empty())
@@ -112,24 +114,45 @@ for(int z=0;z<n2;++z)
 		index--;
 		kd_tree_node* r=max_heap.top();
 		max_heap.pop();
-		result[index]=r;
+		result[z][index]=r;
 	}
 
-	for (int i = 0; i < len; ++i)
-	{
-		for (int j = 0; j < DIMENSIONS; ++j)
-		{
-			rfile << (result[i]->Datapoint[j]) << " ";
-		}
-		rfile << (result[i]->distance) << " ";
-		rfile << "\n";
-	}
+	// for (int i = 0; i < d; ++i)
+	// {
+	// 	rfile << query_point[i]<<" ";
+	// }
+	// rfile << "\n";
+
+	// for (int i = 0; i < len; ++i)
+	// {
+	// 	kd_tree_node *r = result[i] ;
+	// 	for (int j = 0; j < DIMENSIONS; ++j)
+	// 	{
+	// 		rfile << (r->Datapoint[j]) << ' ';
+	// 	}
+	// 	// rfile << (result[i]->distance) << " ";
+	// 	rfile << "\n";
+	// }
 }
 
-cout << 1 << endl;
+
+for(int z=0;z<n2;++z)
+{
+for (int i = 0; i < k; ++i)
+{
+	kd_tree_node * r = result[z][i];
+	for (int j = 0; j < DIMENSIONS; ++j)
+	{
+		rfile << (r->Datapoint[j]) << ' ';
+	}
+	// rfile << (result[i]->distance) << " ";
+	rfile << "\n";
+}
+}
 
 rfile.close();
 
+cout << 1 << endl;
 // [TODO] Read the query point from query_file, do kNN using the kdTree and output the answer to results.txt
 
 // Convey to parent that results.txt is ready by sending "1" on stdout | Timer will stop now and this process will be killed
