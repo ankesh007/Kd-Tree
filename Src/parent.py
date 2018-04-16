@@ -40,16 +40,20 @@ def wait_for_data(expected_data):
 if __name__ == "__main__":
 
 	argc = len(sys.argv)
-	if (argc != 4):
-		print("Expected 4 arguments. Received %d. Exiting."%(argc))
-		print("USAGE: python parent.py [dataset] [query] [k]")
+	if (argc != 5):
+		print("Expected 5 arguments. Received %d. Exiting."%(argc))
+		print("USAGE: python parent.py [dataset] [query] [k] [d]")
 		sys.exit(0)
 
 	dataset_file = sys.argv[1]
 	query_file = sys.argv[2]
 	k = int(sys.argv[3])
+	d = int(sys.argv[4])
+
+	fl = open("graph.csv",'a')
 
 	if not os.path.isfile(dataset_file):
+		print(dataset_file)
 		print('Given dataset file does not exist. Exiting.')
 		print("USAGE: python parent.py [dataset] [query] [k]")
 		sys.exit(0)
@@ -82,4 +86,8 @@ if __name__ == "__main__":
 	print("1 received")
 	time_taken = time.time() - start_time
 	
+	fl.write("{},{},{}\n".format(k,d,time_taken))
+	
 	exit("[PARENT:] Time taken to answer query: %f seconds"%time_taken)
+
+	# fl.close()

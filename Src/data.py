@@ -1,23 +1,24 @@
 import random
 
-n=100000
+n1=100000
+n2=100
+for d in [2,3,5,10,15,20]:
 
-for k in [2,3,5,10,15,20]:
+	f = open('./Data/data' + str(d) + '.txt','w')
+	f.write(str(d)+" "+str(n1)+"\n")
 
-	f = open('./Data/data' + str(k) + '.txt','w')
-	f.write(str(k)+" "+str(n)+"\n")
-	
-	for i in range(n):
-		for j in range(k):
+	for i in range(n1):
+		for j in range(d):
 			f.write(str(random.uniform(0,1))+" ")
 		f.write('\n')
 
-	for i in range(100):	
-		q = open('./Data/query' + str(k) +'-'+str(i)+ '.txt', 'w')
-		q.write(str(k)+"\n")
-		for j in range(k):
+
+	q = open('./Data/query' + str(d) + '.txt', 'w')
+	q.write(str(d)+" "+str(n2)+"\n")
+	for i in range(n2):	
+		for j in range(d):
 			q.write(str(random.uniform(0, 1)) + " ")
 		q.write('\n')
-		q.close()
+	q.close()
 
-	print("k={} done".format(k))
+	print("d={} done".format(d))

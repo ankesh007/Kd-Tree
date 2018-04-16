@@ -44,6 +44,7 @@ void knn(kd_tree_node *root, vector<double> &q, int k)
 {
 	priority_queue<kd_tree_node*, vector<kd_tree_node*>, minheapComparator> min_heap;
 	root->lowerbound = lowerbound(root->minRect, root->maxRect, q);
+	// max_heap.clear();
 
 	min_heap.push(root);
 
